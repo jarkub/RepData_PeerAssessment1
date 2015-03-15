@@ -1,4 +1,9 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
 
 
 ## Loading and preprocessing the data
@@ -29,7 +34,7 @@ rug(data.group.date$sum)
 abline(v=mean(data.group.date$sum), col="red")
 ```
 
-![](./PA1_template_files/figure-html/meansteps-1.png) 
+![plot of chunk meansteps](figure/meansteps-1.png) 
 
 
 
@@ -39,7 +44,7 @@ median.spd <- median(data.group.date$sum)
 ```
 The mean steps per day is: 9354.23
 
-The median steps per day is: 1.0395\times 10^{4}
+The median steps per day is: 1.0395 &times; 10<sup>4</sup>
 
 ## What is the average daily activity pattern?
 
@@ -54,7 +59,8 @@ abline(v=max.interval, col="red")
 axis(1, at=835, col="red")
 ```
 
-![](./PA1_template_files/figure-html/avgdaily-1.png) 
+![plot of chunk avgdaily](figure/avgdaily-1.png) 
+
 The interval with the higest mean is: 835
 
 ## Imputing missing values
@@ -76,16 +82,16 @@ rug(data.imputed.group.date$sum)
 abline(v=mean(data.imputed.group.date$sum), col="red")
 ```
 
-![](./PA1_template_files/figure-html/missing-1.png) 
+![plot of chunk missing](figure/missing-1.png) 
 
 
 ```r
 mean.imputed.spd <- mean(data.imputed.group.date$sum)
 median.imputed.spd <- median(data.imputed.group.date$sum)
 ```
-The mean steps per day using imputed values for NAs is: 1.076619\times 10^{4}
+The mean steps per day using imputed values for NAs is: 1.076619 &times; 10<sup>4</sup>
 
-The median steps per day using imputed values for NAs is: 1.0766189\times 10^{4}
+The median steps per day using imputed values for NAs is: 1.0766189 &times; 10<sup>4</sup>
 
 The difference between the original mean and the imputed mean is: -1411.96
 
@@ -107,6 +113,6 @@ data.imputed.group.wday <- summarize(group_by(data.imputed, day, interval),
 xyplot(mean ~ interval | day, data=data.imputed.group.wday, type="l")
 ```
 
-![](./PA1_template_files/figure-html/weekdays-1.png) 
+![plot of chunk weekdays](figure/weekdays-1.png) 
 
 Weekdays shows a large spike of activity early in the day while weekends shows a more steady rate of activity throughout the day. 

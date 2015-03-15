@@ -60,6 +60,7 @@ max.interval <- data.group.interval$interval[which.max(data.group.interval$mean)
 abline(v=max.interval, col="red")
 axis(1, at=835, col="red")
 ```
+
 The interval with the higest mean is: `r max.interval`
 
 ## Imputing missing values
