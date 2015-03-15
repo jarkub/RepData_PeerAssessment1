@@ -1,17 +1,14 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r loadingdata}
+
+```r
 unzip("./activity.zip")
 data <- read.csv("./activity.csv", colClasses=c("numeric","Date","numeric"))
 ```
-```{r loading.packages,message=F,warning=F}
+
+```r
 library(dplyr)
 library(xtable)
 library(lubridate)
@@ -20,7 +17,8 @@ library(lattice)
 
 
 ## What is mean total number of steps taken per day?
-```{r meansteps, results="asis"}
+
+```r
 data.group.date <- summarize(group_by(data, date),
                         sum = sum(steps, na.rm=TRUE),
                         mean = mean(steps, na.rm=TRUE),
@@ -30,27 +28,22 @@ hist(data.group.date$sum, xlab="Total Steps per Day", main="Histogram of Total S
 rug(data.group.date$sum)
 abline(v=mean(data.group.date$sum), col="red")
 ```
-```{r printingNAs, results='hide', echo=FALSE, warning=FALSE, message=FALSE}
-### data.frame that forces printing of NAs in xtable
-data.group.date.print <- data.group.date
-data.group.date.print[,3:4] <- round(data.group.date.print[,3:4], 2)
-data.group.date.print[is.na(data.group.date.print)] = "NA"
-print(xtable(data.group.date.print[c("date","mean","median")]),
-      type="html",
-      include.rownames=F
-      )
-```
 
-```{r mean.and.median}
+![](./PA1_template_files/figure-html/meansteps-1.png) 
+
+
+
+```r
 mean.spd <- mean(data.group.date$sum)
 median.spd <- median(data.group.date$sum)
 ```
-The mean steps per day is: `r round(mean.spd, 2)`
+The mean steps per day is: 9354.23
 
-The median steps per day is: `r median.spd`
+The median steps per day is: 1.0395\times 10^{4}
 
 ## What is the average daily activity pattern?
-```{r avgdaily}
+
+```r
 data.group.interval <- summarize(group_by(data,interval),
                         mean = mean(steps, na.rm=TRUE))
 
@@ -60,10 +53,13 @@ max.interval <- data.group.interval$interval[which.max(data.group.interval$mean)
 abline(v=max.interval, col="red")
 axis(1, at=835, col="red")
 ```
-The interval with the higest mean is: `r max.interval`
+
+![](./PA1_template_files/figure-html/avgdaily-1.png) 
+The interval with the higest mean is: 835
 
 ## Imputing missing values
-```{r missing}
+
+```r
 # use interval mean to replace NA intervals for steps variable
 missing.rows <- sum(is.na(data))
 data.imputed <- full_join(data, data.group.interval, "interval")
@@ -80,22 +76,26 @@ rug(data.imputed.group.date$sum)
 abline(v=mean(data.imputed.group.date$sum), col="red")
 ```
 
-```{r mean.and.median.imputed}
+![](./PA1_template_files/figure-html/missing-1.png) 
+
+
+```r
 mean.imputed.spd <- mean(data.imputed.group.date$sum)
 median.imputed.spd <- median(data.imputed.group.date$sum)
 ```
-The mean steps per day using imputed values for NAs is: `r round(mean.imputed.spd, 2)`
+The mean steps per day using imputed values for NAs is: 1.076619\times 10^{4}
 
-The median steps per day using imputed values for NAs is: `r median.imputed.spd`
+The median steps per day using imputed values for NAs is: 1.0766189\times 10^{4}
 
-The difference between the original mean and the imputed mean is: `r round(mean.spd - mean.imputed.spd, 2)`
+The difference between the original mean and the imputed mean is: -1411.96
 
-The difference between the original median and the imputed median is: `r round(median.spd - median.imputed.spd, 2)`
+The difference between the original median and the imputed median is: -371.19
 
 In this case, the imputed mean and median are larger than the originals.
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r weekdays}
+
+```r
 data.imputed <- mutate(data.imputed,
                        w=weekdays(date),
                        d=wday(date),
@@ -106,5 +106,7 @@ data.imputed.group.wday <- summarize(group_by(data.imputed, day, interval),
           mean=mean(steps)                     )
 xyplot(mean ~ interval | day, data=data.imputed.group.wday, type="l")
 ```
+
+![](./PA1_template_files/figure-html/weekdays-1.png) 
 
 Weekdays shows a large spike of activity early in the day while weekends shows a more steady rate of activity throughout the day. 
